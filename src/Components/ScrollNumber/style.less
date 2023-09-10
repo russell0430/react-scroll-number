@@ -1,0 +1,77 @@
+@scrollUpNameList: scroll-up-0, scroll-up-1, scroll-up-2, scroll-up-3,
+  scroll-up-4, scroll-up-5, scroll-up-6, scroll-up-7, scroll-up-8, scroll-up-9;
+@scrollDownNameList: scroll-down-0, scroll-down-1, scroll-down-2, scroll-down-3,
+  scroll-down-4, scroll-down-5, scroll-down-6, scroll-down-7, scroll-down-8,
+  scroll-down-9;
+
+.scroll-number {
+  overflow: hidden;
+  display: inline-block;
+
+  .number {
+    position: relative;
+    height: 100%;
+    span {
+      display: block;
+      height: 100%;
+      width: 100%;
+      line-height: 100%;
+    }
+  }
+  .keyFrameUpStage(@className,@index)
+    when
+    (@index <= length(@scrollUpNameList)) {
+    @keyframes @className {
+      0% {
+        top: -(@index+1) * 100%;
+      }
+      100% {
+        top: -(@index) * 100%;
+      }
+    }
+  }
+
+  .keyFrameDown(@className,@index) {
+    @keyframes @className- {
+      0% {
+        top: -(@index+1) * 100%;
+      }
+      100% {
+        top: -(@index) * 100%;
+      }
+    }
+  }
+
+  .keyFrameUp(@i) when(@i<length(@scrollUpNameList)) {
+    .keyFrameUpStage(extract(@scrollUpNameList,@i+1),(@i));
+    .keyFrameUp(@i+1);
+  }
+  .keyFrameUp(0);
+
+  .keyFrameDownStage(@className,@index)
+    when(@index<=length(@scrollDownNameList)) {
+    @keyframes @className {
+      0% {
+        top: -(@index) * 100%;
+      }
+      100% {
+        top: -(@index+1) * 100%;
+      }
+    }
+  }
+
+  .keyFrameDown(@i) when(@i<length(@scrollDownNameList )) {
+    .keyFrameDownStage(extract(@scrollDownNameList,@i + 1), @i  );
+    .keyFrameDown(@i+1);
+  }
+  .keyFrameDown(0);
+  //
+  // @keyframes scroll-down-0 {
+  //   0% {
+  //     top: -900%;
+  //   }
+  //   100% {
+  //     top: -1000%;
+  //   }
+  // }
+}
