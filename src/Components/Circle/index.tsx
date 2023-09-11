@@ -1,22 +1,19 @@
-import React, { useRef } from "react"
-import Number, { NumberRef } from "./Number"
+import React from "react"
+import ScrollNumberGroup from "../ScrollNumberGroup"
 import "./style.scss"
-const parsePercent = (percent: number, index: 0 | 1) => {
-  return index === 0 ? percent % 10 : Math.floor(percent / 10)
-}
-const Circle: React.FC<{ percent: number }> = ({ percent }) => {
-  const p0 = parsePercent(percent, 0)
-  const p1 = parsePercent(percent, 1)
-  const numberRef = useRef<NumberRef>(null)
 
+const Circle: React.FC<{ percent: number }> = ({ percent }) => {
   // console.log(p0, p1)
   return (
-    <div className="card" onClick={numberRef.current?.toggleNext}>
+    <div className="card">
       <div className="rating">
         <h2>
           <span className="counter">
-            <Number height="30px" value={p1} duration={400} mode="UnControl" />
-            <Number value={p0} height="30px" duration={1000} mode="UnControl" />
+            <ScrollNumberGroup
+              mode="ScrollDirectly"
+              value={percent}
+              digitsNumber={2}
+            ></ScrollNumberGroup>
           </span>
           <sup>%</sup>
           <br />

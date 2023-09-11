@@ -19,12 +19,11 @@ type ScrollMode = {
   mode: "Scroll"
 }
 export type ScrollNumberProps = {
-  initialValue: number
+  initialValue?: number
   animationConfig?: Partial<AnimationProp>
   onAnimationEnd?: () => void
   onAnimationAllEnd?: () => void
   height?: React.CSSProperties["height"]
-  withAnimation?: boolean
   background?: React.CSSProperties["background"]
   color?: React.CSSProperties["color"]
 } & (UnControlMode | ControlMode | ScrollMode)

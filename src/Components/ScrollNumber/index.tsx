@@ -6,7 +6,6 @@ import React, {
   useRef,
   useState,
 } from "react"
-// import useMergedState from "../../hooks/useMergedState"
 import {
   AnimationProp,
   ScrollNumberProps,
@@ -14,6 +13,7 @@ import {
   Direction,
 } from "./interface"
 import "./style.less"
+
 const defaultAnimationConfig: Required<AnimationProp> = {
   animationDelay: "0",
   animationDuration: "300ms",
@@ -28,19 +28,19 @@ const ScrollNumber: React.ForwardRefRenderFunction<
 > = (props, ref) => {
   const {
     mode,
-    initialValue,
+    initialValue = 0,
     height = 30,
     animationConfig: animationConfigFromProps = defaultAnimationConfig,
     onAnimationEnd,
     onAnimationAllEnd,
-    withAnimation = true,
     background,
     color,
   } = props
 
-
-  const [value, setValue] = useState(initialValue)
   const valueFromProps = mode === "UnControl" ? props.value : 0
+
+  const [innerValue, setInnerValue] = useState(initialValue)
+
   // implement it with scrollTo
   // const targetRef = useRef(valueFromProps)
   // targetRef.current = valueFromProps
@@ -57,9 +57,9 @@ const ScrollNumber: React.ForwardRefRenderFunction<
   const animationStyle: AnimationProp = useMemo(() => {
     let name
     if (directionRef.current === "up") {
-      name = value
+      name = innerValue
     } else {
-      name = value - 1
+      name = innerValue - 1
       name += name < 0 ? 10 : 0
     }
     return {
@@ -67,10 +67,10 @@ const ScrollNumber: React.ForwardRefRenderFunction<
       ...defaultAnimationConfig,
       ...animationConfigFromProps,
     }
-  }, [animationConfigFromProps, value])
+  }, [animationConfigFromProps, innerValue])
 
   const toggleNext = useCallback(() => {
-    setValue((memorizedValue) => {
+    setInnerValue((memorizedValue) => {
       directionRef.current = "down"
       let pendingValue = memorizedValue + 1
       if (pendingValue >= 10) pendingValue -= 10
@@ -81,7 +81,7 @@ const ScrollNumber: React.ForwardRefRenderFunction<
   }, [])
 
   const togglePrev = useCallback(() => {
-    setValue((memorizedValue) => {
+    setInnerValue((memorizedValue) => {
       directionRef.current = "up"
       let pendingValue = memorizedValue - 1
       if (pendingValue < 0) pendingValue += 10
@@ -94,7 +94,7 @@ const ScrollNumber: React.ForwardRefRenderFunction<
   const continueAnimation = useCallback(() => {
     if (
       (mode === "UnControl" &&
-        value !== valueFromProps &&
+        innerValue !== valueFromProps &&
         !inAnimationRef.current) ||
       (mode === "Scroll" && !inAnimationRef.current)
     ) {
@@ -104,7 +104,7 @@ const ScrollNumber: React.ForwardRefRenderFunction<
         toggleNext()
       }
     }
-  }, [mode, toggleNext, togglePrev, value, valueFromProps])
+  }, [innerValue, mode, toggleNext, togglePrev, valueFromProps])
 
   // TODO
   // const scrollTo = useCallback(
@@ -121,7 +121,7 @@ const ScrollNumber: React.ForwardRefRenderFunction<
   > = () => {
     inAnimationRef.current = false
     onAnimationEnd?.()
-    if (mode === "UnControl" && value === valueFromProps) {
+    if (mode === "UnControl" && innerValue === valueFromProps) {
       // all end
       // only UnControl mode trigger this callback
       onAnimationAllEnd?.()
@@ -132,7 +132,6 @@ const ScrollNumber: React.ForwardRefRenderFunction<
   useEffect(() => {
     continueAnimation()
   }, [continueAnimation])
-  // console.log(animationConfigFromProps.animationDuration)
 
   useImperativeHandle(ref, () => ({
     togglePrev,
@@ -155,11 +154,9 @@ const ScrollNumber: React.ForwardRefRenderFunction<
         className="number"
         onAnimationEnd={onInternalAnimationEnd}
         style={{
-          ...(shouldAnimationRef.current && withAnimation
-            ? animationStyle
-            : {}),
+          ...(shouldAnimationRef.current ? animationStyle : {}),
           height: size,
-          top: `-${value}00%`,
+          top: `-${innerValue}00%`,
         }}
       >
         {numberArray.map((item, index) => (

@@ -1,7 +1,8 @@
+// learn from https://github.com/react-component/util/blob/master/src/hooks/useMergedState.ts
 import { useState, useLayoutEffect } from "react"
 import useLayoutUpdateEffect from "./useLayoutEffect"
 
-type Updater<T> = (updater: T | (() => T)) => void
+type Updater<T> = (updater: T | ((prev: T) => T)) => void
 
 function hasValue<T>(value: unknown): value is T {
   return value !== undefined

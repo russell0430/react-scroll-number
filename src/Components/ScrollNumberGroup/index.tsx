@@ -1,6 +1,6 @@
 import React, {
   useEffect,
-  // useImperativeHandle,
+  useImperativeHandle,
   useMemo,
   useRef,
   useState,
@@ -8,39 +8,41 @@ import React, {
 import ScrollNumber, { ScrollNumberProps } from "../ScrollNumber"
 import { ScrollNumberGroupProps } from "./interface"
 import useLastValue from "../../hooks/useLastValue"
-
+import useMergedState from "../../hooks/useMergedState"
 import splitNum2Digits from "../../utils/splitNum2Digits"
-import { AnimationProp } from "../ScrollNumber/interface"
+import { AnimationProp, ScrollNumberRef } from "../ScrollNumber/interface"
+import useRefs from "../../hooks/useRefs"
 
 type ScrollNumberMode = ScrollNumberProps["mode"]
 export type ScrollNumberGroupRef = {
   toggleNext: VoidFunction
   togglePrev: VoidFunction
+  getNumbersRef: () => Map<number, ScrollNumberRef>
 }
 const ScrollNumberGroup: React.ForwardRefRenderFunction<
   ScrollNumberGroupRef,
   ScrollNumberGroupProps
 > = (props, ref) => {
-  ref // erase the error
-  
   const {
     digitsNumber,
     value: valueFromProps = 0,
     mode,
     duration = 3000,
   } = props
-  // const [value, setValue] = useState(0)
   const lastValue = useLastValue(valueFromProps, 0)
 
-  // const [value, setValue] = useState(valueFromProps)
+  const options = useMemo(() => {
+    if (mode === "ScrollByDigit") return { value: valueFromProps }
+    else if (mode === "ScrollDirectly") return { value: valueFromProps }
+    else return { defaultValue: valueFromProps }
+  }, [mode, valueFromProps])
+
+  const [value, setValue] = useMergedState(valueFromProps, options)
 
   const digitPadding = useMemo(() => {
     return Array(digitsNumber).fill(0)
   }, [digitsNumber])
-  const digits = useMemo(
-    () => splitNum2Digits(valueFromProps),
-    [valueFromProps]
-  )
+  const digits = useMemo(() => splitNum2Digits(value), [value])
   const reversedDigits = [...digits].reverse()
   const digitItems = useMemo(() => {
     return digitPadding
@@ -59,11 +61,7 @@ const ScrollNumberGroup: React.ForwardRefRenderFunction<
       .reverse()
   }, [digitPadding, lastValue, reversedDigits])
 
-  // const ignoreInterpolation = Number(interpolatedDigits.join()) === 0
-  // const [instance, setInstance] = useRefs<ScrollNumberRef>()
-  // useEffect(() => {
-  //   instance.get(1)?.toggleNext()
-  // }, [instance])
+  const [instance, setInstance] = useRefs<ScrollNumberRef>()
 
   const [digitModes, setDigitModes] = useState<ScrollNumberMode[]>(() => {
     if (mode === "ScrollDirectly") {
@@ -71,13 +69,11 @@ const ScrollNumberGroup: React.ForwardRefRenderFunction<
     } else if (mode === "ScrollByDigit") {
       return digitPadding.map(() => "Scroll")
     } else if (mode === "Control") {
-      return digitPadding.map(() => "Control")
+      return digitPadding.map(() => "UnControl")
     }
     // default return
-    return ["Control", "Control", "Control"]
+    return digitPadding.map(() => "Control")
   })
-
-  console.log(digitModes)
 
   const scrollByDigitCallback = () => {
     ScrollByDigitRef.current--
@@ -100,13 +96,15 @@ const ScrollNumberGroup: React.ForwardRefRenderFunction<
     }
   }, [mode, delay])
 
-  console.log(mode)
-  // useImperativeHandle(ref, () => ({
-  //   togglePrev: () => {
-  //     setValue((prev) => prev + 1)
-  //   },
-  //   toggleNext,
-  // }))
+  useImperativeHandle(ref, () => ({
+    togglePrev: () => {
+      setValue((prev) => prev - 1)
+    },
+    toggleNext: () => {
+      setValue((prev) => prev + 1)
+    },
+    getNumbersRef: () => instance,
+  }))
   return (
     <div className="scroll-number-group">
       {digitItems.map((item, index) => {
@@ -132,13 +130,13 @@ const ScrollNumberGroup: React.ForwardRefRenderFunction<
         }
         return (
           <ScrollNumber
-            initialValue={0}
+            initialValue={digitModes[index] === "Control" ? item : 0}
             animationConfig={animationConfig}
             mode={digitModes[index]}
             value={item}
             key={digitsNumber - index}
             onAnimationAllEnd={onAnimationAllend}
-            // ref={(ele) => setInstance(index, ele)}
+            ref={(ele) => setInstance(index, ele)}
           />
         )
       })}
@@ -146,4 +144,4 @@ const ScrollNumberGroup: React.ForwardRefRenderFunction<
   )
 }
 
-export default ScrollNumberGroup
+export default React.forwardRef(ScrollNumberGroup)

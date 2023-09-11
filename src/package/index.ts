@@ -1,3 +1,4 @@
-import Number from "../Components/Circle/Number"
+import * as ScrollNumber from "../Components/ScrollNumber"
+import * as ScrollNumberGroup from "../Components/ScrollNumberGroup"
 
-export default Number
+export { ScrollNumber, ScrollNumberGroup }
