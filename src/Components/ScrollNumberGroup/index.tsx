@@ -54,7 +54,7 @@ const ScrollNumberGroup: React.ForwardRefRenderFunction<
     const reversedValue = splitNum2Digits(lastValue).reverse()
     return digitPadding
       .map(
-        (item, index) =>
+        (_item, index) =>
           (reversedDigits[index] || 0) - (reversedValue[index] || 0)
       )
       .map((item) => (item < 0 ? item + 10 : item))

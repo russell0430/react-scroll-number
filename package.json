@@ -1,10 +1,14 @@
 {
-  "name": "react-scroll-number",
+  "name": "@russell0430/react-scroll-number",
   "private": false,
   "version": "0.0.0",
   "type": "module",
   "main": "dist/react-scroll-number.umd.cjs",
   "module": "dist/react-scroll-number.js",
+  "keywords": [
+    "react",
+    "scroll number"
+  ],
   "exports": {
     ".": {
       "import": "./dist/react-scroll-number.js",
