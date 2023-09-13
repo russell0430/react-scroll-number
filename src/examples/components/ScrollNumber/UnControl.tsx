@@ -1,4 +1,4 @@
-import ScrollNumber from "../../../Components/ScrollNumber"
+import { ScrollNumber } from "../../../../dist/react-scroll-number"
 
 const UnControl: React.FC = () => {
   return (

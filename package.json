@@ -3,11 +3,15 @@
   "private": false,
   "version": "0.0.1",
   "type": "module",
-  "main": "dist/react-scroll-number.umd.cjs",
-  "module": "dist/react-scroll-number.js",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/react-scroll-number.umd.cjs",
+  "module": "./dist/react-scroll-number.js",
   "keywords": [
     "react",
-    "scroll number"
+    "scroll number",
+    "typescript"
   ],
   "exports": {
     ".": {
@@ -23,8 +27,7 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "sass": "^1.66.1"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
@@ -36,7 +39,10 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "less": "^4.2.0",
+    "sass": "^1.66.1",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.5.3",
+    "vite-plugin-libcss": "^1.1.1"
   }
 }

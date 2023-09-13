@@ -1,12 +1,11 @@
-import ScrollNumberGroup from "../../../Components/ScrollNumberGroup"
+import { ScrollNumberGroup } from "../../../../dist/react-scroll-number"
 
 const ScrollByDigit: React.FC = () => {
   return (
     <div>
-      <h2>ScrollByDigit</h2>
+      <h1>ScrollByDigit</h1>
       <div>
         <div>
-          <h2>digitNumber = 2 </h2>
           <ScrollNumberGroup
             mode="ScrollByDigit"
             value={66}
@@ -14,7 +13,7 @@ const ScrollByDigit: React.FC = () => {
           ></ScrollNumberGroup>
         </div>
         <div>
-          <h2>digitNumber = 4 , delay = 2000</h2>
+          <h2>delay = 2000</h2>
           <ScrollNumberGroup
             mode="ScrollByDigit"
             value={88}

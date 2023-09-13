@@ -1,5 +1,8 @@
 import { useRef } from "react"
-import ScrollNumber, { ScrollNumberRef } from "../../../Components/ScrollNumber"
+import {
+  ScrollNumber,
+  ScrollNumberRef,
+} from "../../../../dist/react-scroll-number"
 
 const Control: React.FC = () => {
   const ref = useRef<ScrollNumberRef>(null)

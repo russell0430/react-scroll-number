@@ -1,12 +1,12 @@
 import { useState } from "react"
-import ScrollNumberGroup from "../../../Components/ScrollNumberGroup"
+import { ScrollNumberGroup } from "../../../../dist/react-scroll-number"
 
 const ScrollDirectly: React.FC = () => {
   const [value, setValue] = useState(0)
   const [input, setInput] = useState("")
   return (
     <div>
-      <h2>Scroll Directly</h2>
+      <h1>Scroll Directly</h1>
       <input
         type="number"
         value={input}

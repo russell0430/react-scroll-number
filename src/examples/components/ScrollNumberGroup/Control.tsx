@@ -1,13 +1,14 @@
 import { useRef } from "react"
-import ScrollNumberGroup, {
+import {
+  ScrollNumberGroup,
   ScrollNumberGroupRef,
-} from "../../../Components/ScrollNumberGroup"
+} from "../../../../dist/react-scroll-number"
 
 const Control: React.FC = () => {
   const ref = useRef<ScrollNumberGroupRef>(null)
   return (
     <div>
-      <h2>Scroll Number Group Scroll</h2>
+      <h1>Scroll Number Group Scroll</h1>
       <ScrollNumberGroup mode="Control" ref={ref} digitsNumber={2} value={50} />
       <button type="button" onClick={() => ref.current?.toggleNext()}>
         +

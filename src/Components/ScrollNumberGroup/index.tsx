@@ -19,6 +19,7 @@ export type ScrollNumberGroupRef = {
   togglePrev: VoidFunction
   getNumbersRef: () => Map<number, ScrollNumberRef>
 }
+export type { ScrollNumberGroupProps }
 const ScrollNumberGroup: React.ForwardRefRenderFunction<
   ScrollNumberGroupRef,
   ScrollNumberGroupProps
